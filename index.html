@@ -96,6 +96,17 @@
         const status = document.getElementById('status');
         const soundWave = document.getElementById('sound-wave');
 
+        // Data object containing commands and responses related to consumer rights
+        const commandData = {
+            "hello": "Hello! How can I assist you today?",
+            "what is your name": "I am your AI voice assistant.",
+            "how are you": "I am just a program, but I'm here to help you!",
+            "tell me a joke": "Why don't scientists trust atoms? Because they make up everything!",
+            "what are consumer rights": `Consumer rights are legal entitlements that protect buyers of goods and services. The main consumer rights include the right to safety, the right to be informed, the right to choose, the right to be heard, the right to redress, and the right to privacy.`,
+            "how are consumers protected": `Consumer protection involves laws and regulations designed to ensure fair trade, competition, and accurate information in the marketplace. Key aspects include legislation, regulatory agencies, consumer education, complaint resolution, and quality standards.`,
+            "strategies for consumer protection": `To enhance consumer protection, various strategies can be implemented, such as awareness campaigns, strengthening legislation, monitoring and enforcement, supporting consumer advocacy groups, establishing feedback mechanisms, collaboration with businesses, digital protection, financial literacy programs, and alternative dispute resolution methods.`
+        };
+
         // Function to speak a text
         function speak(text) {
             const utterance = new SpeechSynthesisUtterance(text);
@@ -115,18 +126,18 @@
 
         // Handle the results
         recognition.onresult = function(event) {
-            const speechResult = event.results[0][0].transcript;
+            const speechResult = event.results[0][0].transcript.toLowerCase();
             status.textContent = `You said: "${speechResult}"`;
-            speakResponse(speechResult);
+
+            // Check if the command is in the commandData object
+            if (commandData[speechResult]) {
+                speak(commandData[speechResult]); // Speak the response
+            } else {
+                speak("Sorry, I didn't understand that."); // Default response
+            }
+
             soundWave.style.display = "none";  // Hide sound wave after speaking
         };
-
-        // Function to speak a response
-        function speakResponse(text) {
-            const speechSynthesis = window.speechSynthesis;
-            const utterance = new SpeechSynthesisUtterance(`You said ${text}`);
-            speechSynthesis.speak(utterance);
-        }
 
         // Handle errors
         recognition.onerror = function(event) {
