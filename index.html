@@ -162,13 +162,14 @@
 
         // Handle the results
         recognition.onresult = function(event) {
-            const speechResult = event.results[0][0].transcript.toLowerCase();
-            status.textContent = `You said: "${speechResult}"`;
+            const speechResult = event.results[0][0].transcript.toLowerCase().trim();
+            const response = commandData[currentLanguage][speechResult];
 
-            // Check if the command is in the commandData object for the current language
-            if (commandData[currentLanguage][speechResult]) {
-                speak(commandData[currentLanguage][speechResult]); // Speak the response
+            if (response) {
+                status.textContent = `You said: "${speechResult}"`;
+                speak(response); // Speak the response
             } else {
+                status.textContent = "Sorry, I didn't understand that.";
                 speak("Sorry, I didn't understand that."); // Default response
             }
 
