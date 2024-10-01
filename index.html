@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Voice Assistant</title>
+</head>
+<body>
+
+    <h1>AI Voice Assistant</h1>
+    <button id="start-button">Start Listening</button>
+    <p id="status"></p>
+    
+    <script>
+        // Check for browser support
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        const status = document.getElementById('status');
+
+        // Function to start voice recognition
+        document.getElementById('start-button').onclick = function() {
+            recognition.start();
+            status.textContent = "Listening...";
+        };
+
+        // Handle the results
+        recognition.onresult = function(event) {
+            const speechResult = event.results[0][0].transcript;
+            status.textContent = `You said: "${speechResult}"`;
+            speakResponse(speechResult);
+        };
+
+        // Function to speak a response
+        function speakResponse(text) {
+            const speechSynthesis = window.speechSynthesis;
+            const utterance = new SpeechSynthesisUtterance(`You said ${text}`);
+            speechSynthesis.speak(utterance);
+        }
+
+        // Handle errors
+        recognition.onerror = function(event) {
+            status.textContent = `Error occurred: ${event.error}`;
+        };
+    </script>
+
+</body>
+</html>
