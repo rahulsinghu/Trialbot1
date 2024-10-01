@@ -4,23 +4,103 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Voice Assistant</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: black;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #00e676;
+        }
+
+        #status {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #ccc;
+        }
+
+        #start-button {
+            padding: 15px 30px;
+            font-size: 16px;
+            background-color: #00e676;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #start-button:hover {
+            background-color: #00b248;
+        }
+
+        /* Sound wave container */
+        .sound-wave {
+            display: none;
+            margin-top: 20px;
+            width: 100px;
+            height: 50px;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .bar {
+            width: 10px;
+            height: 20px;
+            background-color: #00e676;
+            animation: wave 1s infinite ease-in-out;
+        }
+
+        .bar:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .bar:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes wave {
+            0%, 100% {
+                height: 20px;
+            }
+            50% {
+                height: 50px;
+            }
+        }
+    </style>
 </head>
 <body>
 
     <h1>AI Voice Assistant</h1>
     <button id="start-button">Start Listening</button>
+    <div class="sound-wave" id="sound-wave">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+    </div>
     <p id="status"></p>
-    
+
     <script>
         // Check for browser support
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         const recognition = new SpeechRecognition();
         const status = document.getElementById('status');
+        const soundWave = document.getElementById('sound-wave');
 
         // Function to start voice recognition
         document.getElementById('start-button').onclick = function() {
             recognition.start();
             status.textContent = "Listening...";
+            soundWave.style.display = "flex";  // Show sound wave
         };
 
         // Handle the results
@@ -28,6 +108,7 @@
             const speechResult = event.results[0][0].transcript;
             status.textContent = `You said: "${speechResult}"`;
             speakResponse(speechResult);
+            soundWave.style.display = "none";  // Hide sound wave after speaking
         };
 
         // Function to speak a response
@@ -40,6 +121,7 @@
         // Handle errors
         recognition.onerror = function(event) {
             status.textContent = `Error occurred: ${event.error}`;
+            soundWave.style.display = "none";  // Hide sound wave on error
         };
     </script>
 
