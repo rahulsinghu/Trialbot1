@@ -96,8 +96,18 @@
         const status = document.getElementById('status');
         const soundWave = document.getElementById('sound-wave');
 
+        // Function to speak a text
+        function speak(text) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            window.speechSynthesis.speak(utterance);
+        }
+
         // Function to start voice recognition
         document.getElementById('start-button').onclick = function() {
+            // Speak "How may I help you?" after clicking the button
+            speak("How may I help you?");
+            
+            // Start listening for commands
             recognition.start();
             status.textContent = "Listening...";
             soundWave.style.display = "flex";  // Show sound wave
